@@ -2,7 +2,7 @@
   "name": "francode",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,5 +11,26 @@
     "url": "(\u0016https://github.com/1990fran/FranCode.git)"
   },
   "author": "Francisco Estrada",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "express-session": "^1.15.6",
+    "express3-handlebars": "^0.5.2",
+    "monaco-editor": "^0.15.6",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.19",
+    "morgan": "^1.9.1",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.10",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "rethinkdb": "^2.3.3",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "express": "^4.16.4"
+  }
 }

@@ -1,0 +1,376 @@
+
+{{#section 'scritpHead'}}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../../bower_components/select2/dist/css/select2.min.css">
+{{/section}}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Admin Proyectos</h3>
+            </div>
+
+            <div id="compartir_proyecto" style="display: none">
+
+                    <div class="box box-info"   >
+                        <!--<div class="box-header with-border">
+                            <h3 class="box-title">Compartir Proyecto</h3>
+                        </div>-->
+                        <div class="box-body">
+
+                            <div class="input-group">
+                                <label>Identificador Proyecto</label>
+                                <input id="proyecto_compartir" type="text" class="form-control" disabled="">
+                            </div>
+                            <br>
+
+                            <!--<div class="input-group">
+                                <span class="input-group-addon">@</span>
+                                <input type="text" class="form-control" placeholder="Username">
+                            </div>-->
+                            <div class="form-group">
+                                <label>Seleccione el usuario</label>
+                                <select id="select_lista_user" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                    <!--<option selected="selected">Alabama</option>
+                                    <option>Alaska</option>
+                                    <option>California</option>
+                                    <option>Delaware</option>
+                                    <option>Tennessee</option>
+                                    <option>Texas</option>
+                                    <option>Washington</option>-->
+                                </select>
+
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <button onclick="compartirProyectoUsaario(1)" type="submit" class="btn btn-primary">Compartir</button>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+
+
+            </div>
+            <div id="registro_exitoso" class="alert alert-success alert-dismissible" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i> Alert!</h4>
+                Accion completada con exito
+            </div>
+
+            <div id="registro_fallido" class="alert alert-danger alert-dismissible" style="display: none">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                Error al registrar el proyecto
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#modal-default">
+                                Crear Proyecto
+                            </button>
+
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="dataTables_length" id="example1_length"><label>Mostrar <select
+                                        name="example1_length" aria-controls="example1" class="form-control input-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> entradas</label></div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div id="example1_filter" class="dataTables_filter"><label>Buscar:<input type="search"
+                                        class="form-control input-sm" placeholder="" aria-controls="example1"></label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        {{lista_proyectos}}
+                        <div class="col-sm-12">
+                            <table id="example1" class="table table-bordered table-striped dataTable" role="grid"
+                                aria-describedby="example1_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending"
+                                            style="width: 157px;">Proyecto</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Browser: activate to sort column ascending"
+                                            style="width: 195px;">Clave</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Platform(s): activate to sort column ascending"
+                                            style="width: 172px;">Descripcion</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 134px;">Administrar</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Engine version: activate to sort column ascending"
+                                            style="width: 134px;">Compartir</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="CSS grade: activate to sort column ascending"
+                                            style="width: 96px;">Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenido-tabla">
+
+
+                                    <!-- <tr role="row" class="even">
+                                        <td class="sorting_1"><i class="fa fa-fw fa-folder"></i>HondurasHN</td>
+                                        <td>HN2019</td>
+                                        <td>Proyecto para administrar los recursos </td>
+                                        <td>
+                                            <a class="btn btn-block btn-primary" href="/AdminProyecto" resolved="">
+                                                <i class="fa fa-fw fa-folder-open-o"></i>Abrir
+                                            </a>
+                                        </td>
+                                        <td><button type="button" class="btn btn-block btn-danger"><i
+                                                    class="fa fa-fw fa-trash-o"></i></button></td>
+                                    </tr> -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1">Proyecto</th>
+                                        <th rowspan="1" colspan="1">Clave</th>
+                                        <th rowspan="1" colspan="1">Descripcion</th>
+                                        <th rowspan="1" colspan="1">Administrar</th>
+                                        <th rowspan="1" colspan="1">Compartir</th>
+                                        <th rowspan="1" colspan="1">Eliminar</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Mostrando 1
+                                a 10 de 57 entradas</div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                                <ul class="pagination">
+                                    <li class="paginate_button previous disabled" id="example1_previous"><a href="#"
+                                            aria-controls="example1" data-dt-idx="0" tabindex="0">Previous</a></li>
+                                    <li class="paginate_button active"><a href="#" aria-controls="example1"
+                                            data-dt-idx="1" tabindex="0">1</a></li>
+                                    <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="2"
+                                            tabindex="0">2</a></li>
+                                    <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="3"
+                                            tabindex="0">3</a></li>
+                                    <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="4"
+                                            tabindex="0">4</a></li>
+                                    <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="5"
+                                            tabindex="0">5</a></li>
+                                    <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="6"
+                                            tabindex="0">6</a></li>
+                                    <li class="paginate_button next" id="example1_next"><a href="#"
+                                            aria-controls="example1" data-dt-idx="7" tabindex="0">Next</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+
+<!-- Ventana Modal-->
+<div class="modal fade" id="modal-default" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Nuevo Proyecto</h4>
+            </div>
+            <div class="modal-body">
+                <!-- COntenido de la ventana modal para registro de un nuevo Proyecto -->
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <!-- <h3 class="box-title">Quick Example</h3> -->
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" id="nombre"
+                                    placeholder="Ingrese el nombre del proyecto">
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre">Clave</label>
+                                <input type="text" class="form-control" id="clave"
+                                    placeholder="Ingrese una clave">
+                            </div>
+                            <div class="form-group">
+                                <label for="descipcion">Descripcion</label>
+                                <textarea type="text" class="form-control" id="descripcion"
+                                    placeholder="Ingrese una descripcion de su proyecto"></textarea>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button onclick="registrarProyecto()" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+{{#section 'scritpFinal'}}
+
+    <script>
+    $(document).ready(function () {
+        getProyectos();
+        getListaUsuarios();
+
+    });
+
+    function getProyectos() {
+        //Se cargo todo el DOM
+        var user_id="{{{user.id}}}";
+        $.ajax({
+            url: "/getProyectos/"+user_id,
+            method: "GET",
+            dataType: "json",
+            success: function (res) {
+                //console.log(res);
+                $("#contenido-tabla").html('');
+                res.forEach(element => {
+                    $("#contenido-tabla").append(`
+                            <tr role="row" class="even">
+                                <td class="sorting_1><i class="fa fa-fw fa-folder"></i>${element.nombre_proyecto}</td>
+                                <td>${element.fecha}</td>
+                                <td>${element.descripcion}</td>
+                                <td><a class="btn btn-block btn-primary" href="/AdminProyecto/${element.id}" resolved=""><i class="fa fa-fw fa-folder-open-o"></i>Abrir</a></td>
+                                <td><button onclick="compartirProyecto('${element.id}')" type="button" class="btn btn-block btn-success"><i class="fa fa-fw fa-share-alt"></i></button></td>
+                                <td><button onclick="eliminarProyecto('${element.id}')" type="button" class="btn btn-block btn-danger"><i class="fa fa-fw fa-trash-o"></i></button></td>
+                            </tr>`
+                )
+            });
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    //ger lista de usuarios
+    function getListaUsuarios() {
+        $.ajax({
+            url: "/getUsuarios",
+            method: "GET",
+            dataType: "json",
+            success: function (res) {
+                console.log(res);
+                $("#select_lista_user").html('');
+                res.forEach(element => {
+                    $("#select_lista_user").append(`<option value="${element.id}">${element.nombre}</option>`);
+                });
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function eliminarProyecto(id) {
+
+        $.ajax({
+            url:"http://localhost:3005/eliminarProyecto/"+id,
+            method:"post",
+            dataType: "json",
+            success:function(res){
+                //console.log(res);
+                //alert("AQUI");
+                $("#registro_exitoso").css("display","block");
+                //coulto el div animandolo
+                $('#registro_exitoso').toggle(5000);
+                getProyectos();
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function registrarProyecto(){
+
+       var user_id="{{{user.id}}}";
+       //alert(user_id);
+        var parametros = {
+            "user_id":user_id,
+            "nombre" : $("#nombre").val(),
+            "clave" : $("#clave").val(),
+            "descripcion":$("#descripcion").val()
+        };
+        $.ajax({
+            url:"http://localhost:3005/proyectos",
+            method:"post",
+            data: parametros,
+            dataType: "json",
+            success:function(res){
+                //console.log(res);
+                $("#registro_exitoso").css("display","block");
+                //coulto el div animandolo
+                $('#registro_exitoso').toggle(5000);
+                $("#nombre").val('');
+                $("#clave").val('');
+                $("#descripcion").val('');
+                $('#modal-default').modal('toggle');
+                //redibujar tabla
+                getProyectos();
+            },
+            error:function(error){
+                console.log(error);
+                $("#registro_fallido").css("display","block");
+                //coulto el div animandolo
+                $('#registro_fallido').toggle(5000);
+            }
+        });
+    }
+    
+
+
+    function compartirProyecto(id){
+        $("#compartir_proyecto").css("display","block");
+        $("#proyecto_compartir").val(id);
+    }
+
+    function compartirProyectoUsaario(){
+        $("#compartir_proyecto").css("display","none");
+        $("#registro_exitoso").css("display","block");
+        //coulto el div animandolo
+        $('#registro_exitoso').toggle(5000);
+    }
+    //select 2
+
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+
+
+    })
+</script>
+
+    <!-- Select2 -->
+    <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
+{{/section}}

@@ -1,0 +1,17 @@
+{
+  "name": "francode",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Francisco Estrada"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

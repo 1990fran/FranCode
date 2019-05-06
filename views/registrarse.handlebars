@@ -1,0 +1,96 @@
+<div class="register-box">
+  <div class="register-logo">
+    <a href="#"><b>{FRAN</b>CODE}</a>
+  </div>
+
+  <div class="register-box-body">
+    <p class="login-box-msg">Registrarse como usuario nuevo</p>
+
+        {{#if message.length}}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+        {{/if}}
+
+
+      <div id="registro_exitoso" class="alert alert-success alert-dismissible" style="display: none">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-check"></i> Alert!</h4>
+          Usuario registrado con Exito
+      </div>
+
+      <div id="registro_fallido" class="alert alert-danger alert-dismissible" style="display: none">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+          Error al registrar el usuario
+      </div>
+
+      <div class="form-group has-feedback">
+        <input id="nombre" type="text" class="form-control" placeholder="Usuario">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="email" type="email" class="form-control" placeholder="Email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="password" type="password" class="form-control" placeholder="Password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="password_rep" type="password" class="form-control" placeholder="Retype password">
+        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+
+        </div>
+        <!-- /.col -->
+          <div class="col-xs-4">
+              <input onclick="registrarUsuario()" type="submit" class="btn btn-primary btn-block btn-flat"></input>
+          </div>
+        <!-- /.col -->
+      </div>
+
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+      <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign up using
+        Facebook</a>
+      <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign up using
+        Google+</a>
+    </div>
+
+  </div>
+  <!-- /.form-box -->
+</div>
+
+<script>
+
+    function registrarUsuario(){
+        var parametros = {
+
+            "nombre" : $("#nombre").val(),
+            "email" : $("#nombre").val(),
+            "password":$("#password").val()
+        };
+        $.ajax({
+            url:"http://localhost:3005/registrarse",
+            method:"post",
+            data: parametros,
+            dataType: "json",
+            success:function(res){
+                console.log(res);
+                $("#registro_exitoso").css("display","block");
+                $("#nombre").val('');
+                $("#correo").val('');
+                $("#password").val('');
+                $("#password_rep").val('');
+            },
+            error:function(error){
+                console.log(error);
+                $("#registro_fallido").css("display","block");
+            }
+        });
+    }
+</script>

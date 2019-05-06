@@ -1,0 +1,634 @@
+{{#section 'scritpHead'}}
+    <link rel="stylesheet" href="/dist/jstree/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- codeMirror -->
+    <script src="/dist/codemirror/lib/codemirror.js"></script>
+    <script src="/dist/codemirror/mode/javascript/javascript.js"></script>
+    <script src="/dist/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="/dist/codemirror/mode/css/css.js"></script>
+    <script src="/js/socket.io.js"></script>
+
+    <link rel="stylesheet" href="/dist/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/dist/codemirror/theme/base16-light.css">
+
+    <style>
+        .beauty-input {
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+            -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+            -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+            transition: border linear 0.2s, box-shadow linear 0.2s;
+        }
+    </style>
+    <script>
+        /* Get the element you want displayed in fullscreen mode (a video in this example): */
+        //var elem = document.getElementById("tad_4").webkitRequestFullscreen();
+
+        /* When the openFullscreen() function is executed, open the video in fullscreen.
+        Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+
+        function openFullscreen() {
+            var elem=document.getElementById("result_html");
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+
+
+        }
+    </script>
+{{/section}}
+<h1>Administrar Proyecto: {{user.username}}</h1>
+<div class="row">
+    <div class="col-md-3">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h4 class="box-title">Proyecto #nombre#</h4>
+            </div>
+            <div class="box-body">
+                <div><span id="create_folder_node"><i class="fas fa-folder-plus fa-2x"
+                                                      style="color: #EFCE4A; "></i></span>
+                    <span id="create_file_code_node"><i class="far fa-file-code fa-2x"></i></span>
+                    <span id="edit_name_node"><i class="fas fa-edit fa-2x"></i></span>
+                    <span id="delete_node"><i class="fas fa-trash-alt fa-2x"></i></span>
+                </div>
+                <!-- the events -->
+                <div id="external-events">
+                    <!-- 3 setup a container element -->
+                    <div id="jstree">
+                        <!-- in this example the tree is populated from inline HTML -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /. box -->
+
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div id="tabs" class="nav-tabs-custom">
+            <ul  class="nav nav-tabs">
+                <!--<li class="active"><a href="#tab_1#hmtl" data-toggle="tab" aria-expanded="true">HTML</a></li>
+                <li class=""><a href="#tab_1#css" data-toggle="tab" aria-expanded="false">CSS</a></li>
+                <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">JAVASCRIPT</a></li>
+                <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Compile</a></li>
+                -->
+                <li class="active" onclick="editor_francode('Html')" ><a href="#tab_1" data-toggle="tab" aria-expanded="true">HTML</a></li>
+                <li class="" onclick="editor_francode('Css')" class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">CSS</a></li>
+                <li class="" class="" onclick="editor_francode('Js')"><a href="#tab_3" data-toggle="tab" aria-expanded="false">JAVASCRIPT</a></li>
+                <li class="" onclick="editor_francode('Compile')"><a href="#tab_4" data-toggle="tab" aria-expanded="false">Compile</a></li>
+
+                <!--
+                <li id="tad_html" class="active" onclick="editor_francode('Html')"><a href="#tab_1" data-toggle="tab" aria-expanded="false" >HTML</a></li>
+                <li id="tad_css" class="" onclick="editor_francode('Css')"><a href="#tab_1" data-toggle="tab" aria-expanded="false" >CSS</a></li>
+                <li id="tad_js" class="" onclick="editor_francode('Js')"><a href="#tab_1" data-toggle="tab" aria-expanded="false" >JAVASCRIPT</a></li>
+                <li id="tad_compile" class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Compile</a></li>
+                -->
+                <li class="pull-right"><a href="javascript:;" onclick="openFullscreen()" class="text-muted"><i class="fa  fa-arrows-alt"></i></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                <div class="box box-primary">
+                    <div class="box-body no-padding">
+                        <div id="editor-wrapper">
+                            <span class="cuser">Current User: </span><span id="username">{{user.username}}</span><br>
+                            <textarea name="editor1" id="editor"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                    <div class="box box-primary">
+                        <div class="box-body no-padding">
+                            <div id="editor-wrapper">
+                                <span class="cuser">Current User: </span><span id="username">{{user.username}}</span><br>
+                                <textarea name="editor2" id="editor2"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_3">
+                    <div class="box box-primary">
+                        <div class="box-body no-padding">
+                            <div id="editor-wrapper">
+                                <span class="cuser">Current User: </span><span id="username">{{user.username}}</span><br>
+                                <textarea name="editor3" id="editor3"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_4">
+                    <iframe id="result_html" class="beauty-input" style="height: 100%; width: 100%;"></iframe>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!--<div class="box box-primary">
+            <div class="box-body no-padding">
+
+                <div id="editor-wrapper">
+                    <span class="cuser">Current User: </span><span id="username">{{user.username}}</span><br>
+                    <textarea id="editor"></textarea>
+                </div>
+            </div>
+
+        </div>  -->
+        <!-- /. box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+{{#section 'scritpFinal'}}
+
+
+    <!-- 5 include the minified jstree source -->
+    <script src="/dist/jstree/jstree.min.js"></script>
+    <script>
+
+
+
+        var idP="{{{id_proyecto}}}";
+        var userName="{{{user.username}}}";
+
+
+        //funcion se va a ejecutar al cargar el documento
+        $(document).ready(function () {
+
+            //var directorioProyecto=[];
+            $.ajax({
+                url: 'getDirProyecto/'+idP,
+                method: "GET",
+                dataType: "json",
+                success: function (res) {
+        //var data=[{"id":"j1_1","text":"","icon":true,"li_attr":{"id":"j1_1"},"a_attr":{"href":"#","id":"j1_1_anchor"},"state":{"loaded":true,"opened":true,"selected":true,"disabled":false},"data":{},"children":[{"id":"j1_2","text":"JS","icon":"img/iconos/folder.png","li_attr":{"id":"j1_2"},"a_attr":{"href":"#","id":"j1_2_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"j1_3","text":"CSS","icon":"img/iconos/folder.png","li_attr":{"id":"j1_3"},"a_attr":{"href":"#","id":"j1_3_anchor"},"state":{"loaded":true,"opened":false,"selected":true,"disabled":false},"data":{},"children":[]}]}];
+          //var data=[{"id":"ajson1","text":"Simple root node","icon":true,"li_attr":{"id":"ajson1"},"a_attr":{"href":"#","id":"ajson1_anchor"},"state":{"loaded":true,"opened":true,"selected":false,"disabled":false},"data":{},"children":[{"id":"p3","text":"estrada","icon":"img/iconos/folder.png","li_attr":{"id":"p3"},"a_attr":{"href":"#","id":"p3_anchor"},"state":{"loaded":true,"opened":true,"selected":false,"disabled":false},"data":{},"children":[{"id":"WSmpkDCOkP","text":"fran","icon":"../img/iconos/folder.png","li_attr":{"id":"WSmpkDCOkP"},"a_attr":{"href":"#","id":"WSmpkDCOkP_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]}]},{"id":"Uo1T9m50fq","text":"nueva","icon":"../img/iconos/folder.png","li_attr":{"id":"Uo1T9m50fq"},"a_attr":{"href":"#","id":"Uo1T9m50fq_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]}]},{"id":"ajson2","text":"Root node 2","icon":true,"li_attr":{"id":"ajson2"},"a_attr":{"href":"#","id":"ajson2_anchor"},"state":{"loaded":true,"opened":true,"selected":true,"disabled":false},"data":{},"children":[{"id":"ajson3","text":"Child 1","icon":true,"li_attr":{"id":"ajson3"},"a_attr":{"href":"#","id":"ajson3_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"ajson4","text":"Child 2","icon":true,"li_attr":{"id":"ajson4"},"a_attr":{"href":"#","id":"ajson4_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"T2EM63FbXi","text":"pedro","icon":"../img/iconos/folder.png","li_attr":{"id":"T2EM63FbXi"},"a_attr":{"href":"#","id":"T2EM63FbXi_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"U6TGpXUwOk","text":"js","icon":"../img/iconos/folder.png","li_attr":{"id":"U6TGpXUwOk"},"a_attr":{"href":"#","id":"U6TGpXUwOk_anchor"},"state":{"loaded":true,"opened":false,"selected":true,"disabled":false},"data":{},"children":[]}]}];
+                    //var data=[{"id":"ajson1","text":"Simplerootnode","icon":true,"li_attr":{"id":"ajson1"},"a_attr":{"href":"#","id":"ajson1_anchor"},"state":{"loaded":true,"opened":true,"selected":true,"disabled":false},"data":{},"children":[{"id":"p3","text":"estrada","icon":"img/iconos/folder.png","li_attr":{"id":"p3"},"a_attr":{"href":"#","id":"p3_anchor"},"state":{"loaded":true,"opened":true,"selected":false,"disabled":false},"data":{},"children":[{"id":"WSmpkDCOkP","text":"fran","icon":"../img/iconos/folder.png","li_attr":{"id":"WSmpkDCOkP"},"a_attr":{"href":"#","id":"WSmpkDCOkP_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]}]},{"id":"Uo1T9m50fq","text":"nueva","icon":"../img/iconos/folder.png","li_attr":{"id":"Uo1T9m50fq"},"a_attr":{"href":"#","id":"Uo1T9m50fq_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"nJBS571uwh","text":"blancaMateilde","icon":"../img/iconos/folder.png","li_attr":{"id":"nJBS571uwh"},"a_attr":{"href":"#","id":"nJBS571uwh_anchor"},"state":{"loaded":true,"opened":false,"selected":true,"disabled":false},"data":{},"children":[]}]},{"id":"ajson2","text":"Rootnode2","icon":true,"li_attr":{"id":"ajson2"},"a_attr":{"href":"#","id":"ajson2_anchor"},"state":{"loaded":true,"opened":true,"selected":false,"disabled":false},"data":{},"children":[{"id":"ajson3","text":"Child1","icon":true,"li_attr":{"id":"ajson3"},"a_attr":{"href":"#","id":"ajson3_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"ajson4","text":"Child2","icon":true,"li_attr":{"id":"ajson4"},"a_attr":{"href":"#","id":"ajson4_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"T2EM63FbXi","text":"pedro","icon":"../img/iconos/folder.png","li_attr":{"id":"T2EM63FbXi"},"a_attr":{"href":"#","id":"T2EM63FbXi_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]},{"id":"U6TGpXUwOk","text":"js","icon":"../img/iconos/folder.png","li_attr":{"id":"U6TGpXUwOk"},"a_attr":{"href":"#","id":"U6TGpXUwOk_anchor"},"state":{"loaded":true,"opened":false,"selected":false,"disabled":false},"data":{},"children":[]}]}];
+                    //console.log(res);
+                   //console.log(res.split(String.fromCharCode(92)).join(String.fromCharCode(32)) );
+
+                    //alert(res);
+                    //var directorioProyecto="";
+                    //var data = JSON.stringify(res);
+                    //console.log(data);
+                    //eliminando contrapelcas
+                    //data=res.split(String.fromCharCode(92)).join(String.fromCharCode(32));
+                    //eliminando espacios en blanco
+                    //data=data.replace(/ /g, "");
+                    //console.log(data);
+                    //console.log(res);
+                    $('#jstree').jstree({
+                        'core': {
+                            "check_callback": true,
+                            //'data':JSON.stringify(data),
+                            'data':JSON.parse(res)
+
+                        }
+                    });
+
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+            /*$.get('getDirProyecto/'+idP,function (data) {
+                alert(data);
+                console.log(data);
+                directorioProyecto=data;
+            });*/
+            //alert(directorioProyecto);
+
+        });
+
+        function randomString(length) {
+            var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+
+            if (!length) {
+                length = Math.floor(Math.random() * chars.length);
+            }
+
+            var str = '';
+            for (var i = 0; i < length; i++) {
+                str += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return str;
+        }
+
+        //como crear un fichero
+        $('#create_folder_node').click(function () {
+            id_gen=randomString(10);
+            var ref = $('#jstree').jstree(true);
+            sel = ref.get_selected();
+            //creacion del folder y enviarle el id del proyecto
+            sel = ref.create_node(sel, {
+                "id": id_gen,
+                "text": "Parent-4",
+                icon: "../img/iconos/folder.png",
+                "types":'subDirectorio'
+            });
+            if (sel) {
+                ref.edit(sel,'Parent-4',function(){
+                    ref.select_node(sel);
+                    var data_folder={};
+                    data_folder.text=ref.get_text(sel);
+                    data_folder.idFolder=id_gen;
+                    data_folder.icon="../img/iconos/folder.png";
+                    data_folder.id_proyecto=idP;
+                    data_folder.types='subDirectorio';
+                    var JSONnew = JSON.stringify(ref.get_json());
+
+                    data_folder.arbolJSON=(JSONnew);
+                    ActualizarArbolJsonBasedatos(data_folder,'/AdminProyecto/insertFolderProyecto');
+
+                });
+            }
+        });
+        //------- Funcion para guardar el contenido en la base de datos
+        function ActualizarArbolJsonBasedatos(data_folder,URL){
+            $.ajax({
+                type:'POST',
+                data:JSON.stringify(data_folder),
+                contentType:'application/json',
+                url:URL,
+                success:function (data) {
+                    console.log('success');
+                    console.log(JSON.stringify(data));
+                }
+            });
+        }
+        //insertando Fichero
+        $('#create_file_code_node').click(function () {
+            id_gen=randomString(10);
+            var ref = $('#jstree').jstree(true);
+            sel = ref.get_selected();
+            //creacion del folder y enviarle el id del proyecto
+            sel = ref.create_node(sel, {
+                "id": id_gen,
+                "text": "folder",
+                icon: "../img/iconos/code.png",
+                "type":'Archivo'
+            });
+            if (sel) {
+                ref.edit(sel,'Parent-4',function(){
+                    ref.select_node(sel);
+                    var data_folder={};
+                    data_folder.text=ref.get_text(sel);
+                    data_folder.idFolder=id_gen;
+                    data_folder.icon="../img/iconos/folder.png";
+                    data_folder.id_proyecto=idP;
+                    data_folder.type="Archivo";
+                    var JSONnew = JSON.stringify(ref.get_json());
+
+                    data_folder.arbolJSON=(JSONnew);
+                    ActualizarArbolJsonBasedatos(data_folder,'/AdminProyecto/insertFolderProyecto');
+
+                });
+            }
+            /*var ref = $('#jstree').jstree(true);
+            sel = ref.get_selected();
+            //crear una carpeta en la base de datos y enviarle el id del proyecto
+
+            sel = ref.create_node(sel, {
+                "id": "p33",
+                "text": "Parent-4",
+                icon: "../img/iconos/code.png",
+            });
+            if (sel) {
+                ref.edit(sel);
+            }*/
+        });
+
+        //-------------------- Editar el nombre de una carpeta o un archivo
+        $('#edit_name_node').click(function () {
+            var ref = $('#jstree').jstree();
+            sel = ref.get_selected();
+            if (sel) {
+                ref.edit(sel,'',function () {
+                    //console.log("AQUI");
+
+                    var data_folder={};
+                    data_folder.id_proyecto=idP;
+                    var JSONnew = JSON.stringify(ref.get_json());
+
+                    data_folder.arbolJSON=(JSONnew);
+                    ActualizarArbolJsonBasedatos(data_folder,'/AdminProyecto/insertFolderProyecto');
+                });
+            }
+
+            //demo_create();
+
+        });
+
+        //eliminando una carpeta u un archivo
+        $('#delete_node').click(function () {
+            var ref = $('#jstree').jstree(true),
+                    sel = ref.get_selected();
+            if (!sel.length) { return false; }
+            ref.delete_node(sel);
+
+            var data_folder={};
+            data_folder.id_proyecto=idP;
+            var JSONnew = JSON.stringify(ref.get_json());
+
+            data_folder.arbolJSON=(JSONnew);
+            //una vez eliminado guardo el nuevo JSON en la base de datos
+            ActualizarArbolJsonBasedatos(data_folder,'/AdminProyecto/insertFolderProyecto');
+
+        });
+
+
+    </script>
+
+<!-- CODE MIRROR-->
+
+    <script>
+    //editor francode
+    function editor_francode(codigo) {
+        ///alert("AQQUI"+codigo);
+        if(codigo=="Html"){
+            myCodeMirror.setValue(codigo);
+          /*  $("#tad_css").removeClass("active");
+            $("#tad_js").removeClass("active");
+            $("#tad_html").removeClass("active");
+            $("#tad_compile").removeClass("active");
+            $("#tad_html").addClass("active");
+        */
+        }else if(codigo=="Css") {
+            myCodeMirrorCSS.setValue(codigo);
+            /*
+            $("#tad_css").removeClass("active");
+            $("#tad_js").removeClass("active");
+            $("#tad_html").removeClass("active");
+            $("#tad_compile").removeClass("active");
+            $("#tad_css").addClass("active");*/
+        }else if (codigo=="Js"){
+            myCodeMirrorJS.setValue(codigo);
+           /* $("#tad_css").removeClass("active");
+            $("#tad_js").removeClass("active");
+            $("#tad_html").removeClass("active");
+            $("#tad_compile").removeClass("active");
+            $("#tad_js").addClass("active");*/
+        } else {
+            //alert("AQUI");
+            //updateIframe(html,style,js)
+
+            updateIframe(myCodeMirror.getValue(),myCodeMirrorCSS.getValue(),myCodeMirrorJS.getValue());
+        }
+
+    }
+
+
+    function updateIframe(codigo_html,hojasStyles,javaScriptCode){
+        //var text= "<script><\/script>";
+        var codigo=`
+                <html>
+                  <head><style>${hojasStyles}</style></head>
+                  <body>
+                    ${codigo_html}
+
+                    <script>${javaScriptCode}<\/script>
+                </body>
+                </html>
+                `;
+
+        //console.log(cadena);
+        var myFrame = $("#result_html").contents().find('body');
+        //var textareaValue = $("textarea").val();
+        var textareaValue = codigo_html;
+        myFrame.html(codigo);
+        //myFrame.contents().find('head').append('<script  type="text/css">' +hojasStyles+ '<script >');
+    }
+
+        //funcion que mre retornara los parametros que le envio de la URL
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+        //variable de sala de chat y variable del usuario que esta en el chat
+        var room = getParameterByName('room');
+        var user = "{{{user.username}}}";
+
+        //item seleccionado y retornar el id
+        $('#jstree').on("select_node.jstree", function (e, data) {
+            //console.log("node_id: " + data.node.icon);
+            //valido si si es un directorio o un archivo donde se esta haciendo click
+            if(data.node.text.indexOf("index.html") > -1){
+                $('a[href="#tab_1"]').click();
+                cambiarDeSala(data.node.id,userName,1);
+
+
+
+                //$("#tabs").tabs("select", 2);
+                //console.log("HTML");
+                //console.log(data.node.id);
+                //console.log("archivo");
+               // console.log(data.node.id);
+                //le asigno la sala al archivo que el usuario le dio click
+                //room=data.node.id;
+                //cambiarDeSala();
+            }else if(data.node.text.indexOf("controller.js") > -1){
+                $('a[href="#tab_3"]').click();
+                cambiarDeSala(data.node.id,userName,3);
+
+
+                //console.log("JS");
+
+            }else if(data.node.text.indexOf("styles.css") > -1){
+                $('a[href="#tab_2"]').click();
+                cambiarDeSala(data.node.id,userName,2);
+                //console.log("CSS");
+            }
+        });
+
+        //almaceno la sala de chat y usuario
+        /*
+        var room = getParameterByName('room');
+        var user = getParameterByName('user');
+        */
+
+
+        //lo envio y muestro el nombre
+        //document.getElementById("username").innerHTML = user;
+
+        var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            //mode:"html"
+            //lineNumbers: false,
+            //mode: "htmlmixed"
+        });
+        myCodeMirror.setOption("theme","base16-light");
+
+        var myCodeMirrorCSS = CodeMirror.fromTextArea(document.getElementById("editor2"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            //lineNumbers: true,
+            //mode: "css"
+            //mode: "htmlmixed"
+        });
+        myCodeMirrorCSS.setOption("theme","base16-light");
+
+    var myCodeMirrorJS = CodeMirror.fromTextArea(document.getElementById("editor3"), {
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        //lineNumbers: true,
+        //mode: "css"
+        //mode: "htmlmixed"
+    });
+    myCodeMirrorJS.setOption("theme","base16-light");
+
+
+        //inicio la variable socket cliente
+        var socket = io();
+
+        function cambiarDeSala(room,user,editor){
+            $.ajax({
+                url: '/getData/' + room,
+                success: function(result, status, xhr) {
+                    switch (editor) {
+                        case 1:
+                            myCodeMirror.setValue(result.value);
+                            break;
+                        case 2:
+                            myCodeMirrorCSS.setValue(result.value);
+                            break;
+                        case 3:
+                            myCodeMirrorJS.setValue(result.value);
+                            break;
+                    }
+
+                    console.log(result);
+                }
+            });
+
+
+
+            switch (editor) {
+                case 1:
+                    //utilizo socket y elmito el mensaje del objeto keyup
+                    myCodeMirror.on('keyup', function () {
+                        var msg = {
+                            id: room,
+                            user: user,
+                            value: myCodeMirror.getValue()
+                        }
+                        socket.emit('document-update',msg);
+                    });
+                    break;
+                case 2:
+                    //utilizo socket y elmito el mensaje del objeto keyup
+                    myCodeMirrorCSS.on('keyup', function () {
+                        var msg = {
+                            id: room,
+                            user: user,
+                            value: myCodeMirrorCSS.getValue()
+                        }
+                        socket.emit('document-update',msg);
+                    });
+                    break;
+                case 3:
+                    //utilizo socket y elmito el mensaje del objeto keyup
+                    myCodeMirrorJS.on('keyup', function () {
+                        var msg = {
+                            id: room,
+                            user: user,
+                            value: myCodeMirrorJS.getValue()
+                        }
+                        socket.emit('document-update',msg);
+                    });
+                    break;
+            }
+
+            switch (editor) {
+                case 1:
+                    //escuchar el mensaje
+                    socket.on('doc', function(msg){
+                        if(msg.new_val.id === room && msg.new_val.user != user) {
+                            var current_pos = myCodeMirror.getCursor();
+                            myCodeMirror.getDoc().setValue(msg.new_val.value);
+                            myCodeMirror.setCursor(current_pos);
+                        }
+                    });
+                    break;
+                case 2:
+                    //escuchar el mensaje
+                    socket.on('doc', function(msg){
+                        if(msg.new_val.id === room && msg.new_val.user != user) {
+                            var current_pos = myCodeMirrorCSS.getCursor();
+                            myCodeMirrorCSS.getDoc().setValue(msg.new_val.value);
+                            myCodeMirrorCSS.setCursor(current_pos);
+                        }
+                    });
+                    break;
+                case 3:
+                    //escuchar el mensaje
+                    socket.on('doc', function(msg){
+                        if(msg.new_val.id === room && msg.new_val.user != user) {
+                            var current_pos = myCodeMirrorJS.getCursor();
+                            myCodeMirrorJS.getDoc().setValue(msg.new_val.value);
+                            myCodeMirrorJS.setCursor(current_pos);
+                        }
+                    });
+                    break;
+            }
+
+            /*$.ajax({
+                url: '/getData/' + room,
+                success: function(result, status, xhr) {
+                    myCodeMirror.setValue(result.value);
+                    console.log(result);
+                }
+            });*/
+        }
+
+
+        //utilizo socket y elmito el mensaje del objeto keyup
+        /*myCodeMirror.on('keyup', function () {
+            var msg = {
+                id: room,
+                user: user,
+                value: myCodeMirror.getValue()
+            }
+            socket.emit('document-update',msg);
+        });
+
+        //escuchar el mensaje
+        socket.on('doc', function(msg){
+            if(msg.new_val.id === room && msg.new_val.user != user) {
+                var current_pos = myCodeMirror.getCursor();
+                myCodeMirror.getDoc().setValue(msg.new_val.value);
+                myCodeMirror.setCursor(current_pos);
+            }
+        });*/
+
+    </script>
+{{/section}}
